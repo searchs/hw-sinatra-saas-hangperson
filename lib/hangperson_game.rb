@@ -25,19 +25,41 @@ class HangpersonGame
     Net::HTTP.post_form(uri, {}).body
   end
 
-  def guess(your_guess)
-    @guesses = your_guess
-    unless valid
-      @wrong_guesses << your_guess
+  def guess(letter)
+
+    if @word.include? letter
+      @guesses << letter
+      true
+    else
       @count += 1
+      @wrong_guesses += letter
+      # raise Exception,
+
+      false
+    end
+    begin
+      check_win_lose @count
+    rescue Exception, "Wrong letter. #{:play}"
+      "Play again"
+    end
+
+  end
+
+  def check_win_lose(counts)
+    if counts == 7
+      :lose
+    elsif counts < 7
+      raise Exception, "Wrong letter"
+      # return :play
+    else
+      :win
     end
   end
 
-  def valid
-    raise Exception, "Wrong guess" unless @word.include? @guesses.to_s
-     true
-  end
 
+  def word_with_guesses
+    "You won!" if @guesses == @word
+  end
 
 end
 
