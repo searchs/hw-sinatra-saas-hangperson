@@ -1,8 +1,12 @@
 /* @override http://localhost:9292/default.css */
+
+@import url(https://fonts.googleapis.com/css?family=Lato:400,300,700);
+
 body {
-	font-family: Helvetica, Arial, Geneva, sans-serif;
+	font-family: 'Lato',Helvetica, Arial, Geneva, sans-serif;
 	padding: 2em;
-	border: 8px solid teal;
+	border: 4px solid orangered;
+	font-weight: 200;
 }
 
 span.word {
