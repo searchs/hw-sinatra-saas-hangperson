@@ -30,7 +30,7 @@ describe HangpersonGame do
         expect(@game.wrong_guesses).to eq('')
       end
 
-      it 'returns true'  do
+      it 'returns true', :pending => true  do
         expect(@valid).not_to be false
       end
     end
@@ -40,11 +40,11 @@ describe HangpersonGame do
         @valid = @game.guess('z')
       end
 
-      it 'changes wrong guess list' do
+      it 'changes wrong guess list', :pending => true do
         expect(@game.guesses).to eq('')
         expect(@game.wrong_guesses).to eq('z')
       end
-      it 'returns true' do
+      it 'returns true', :pending => true do
         expect(@valid).not_to be false
       end
     end

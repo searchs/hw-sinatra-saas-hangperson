@@ -26,40 +26,43 @@ class HangpersonGame
   end
 
   def guess(letter)
-
-    if @word.include? letter
-      @guesses << letter
-      true
+    if !letter.nil? or !letter.empty? or letter.size == 1 or letter.is_a? String
+      if @word.include? letter
+        if @guesses.include? letter
+          return true
+        else
+        @guesses << letter
+        true
+        end
     else
-      @count += 1
-      @wrong_guesses += letter
-      # raise Exception,
-
-      false
+     if @wrong_guesses.include? letter
+       "Wrong Guess. Another try?"
+       false
+     else
+     @count += 1
+      @wrong_guesses << letter
+      p @wrong_guesses
     end
-    begin
-      check_win_lose @count
-    rescue Exception, "Wrong letter. #{:play}"
-      "Play again"
     end
-
+  else
+    raise ArgumentError, "Invalid entry.  Enter a valid letter."
   end
-
-  def check_win_lose(counts)
-    if counts == 7
-      :lose
-    elsif counts < 7
-      raise Exception, "Wrong letter"
-      # return :play
-    else
-      :win
-    end
-  end
-
-
-  def word_with_guesses
-    "You won!" if @guesses == @word
-  end
-
 end
 
+def check_win_or_lose
+  if @counts == 7
+    :lose
+  elsif @counts < 7
+    return :play
+  else
+    @word == @guesses
+    :win
+  end
+end
+
+
+def word_with_guesses
+  "You won!" if @guesses == @word
+end
+
+end
