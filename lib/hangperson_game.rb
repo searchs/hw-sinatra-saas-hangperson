@@ -9,13 +9,18 @@ class HangpersonGame
   # def initialize()
   # end
 
-  attr_accessor :word, :guesses, :wrong_guesses, :count
+  attr_accessor :word, :guesses, :wrong_guesses
 
   def initialize(new_word)
-    @word = new_word
-    @guesses = ''
-    @wrong_guesses = ''
-    @count = 0
+    if !new_word.nil? and !new_word.empty? and new_word.class == String
+      word = new_word.downcase
+      @word = word
+      @guesses = ''
+      @wrong_guesses = ''
+    else
+      raise ArgumentError, "Invalid word for game!"
+    end
+
   end
 
   def self.get_random_word
@@ -25,44 +30,44 @@ class HangpersonGame
     Net::HTTP.post_form(uri, {}).body
   end
 
-  def guess(letter)
-    if !letter.nil? or !letter.empty? or letter.size == 1 or letter.is_a? String
-      if @word.include? letter
-        if @guesses.include? letter
-          return true
-        else
-        @guesses << letter
-        true
-        end
+
+  def guess(l)
+    letter = l.downcase
+    if !letter.nil? and !letter.empty? and letter.size == 1 and letter.is_a? String
+      valid = self.word.include? letter
+      if valid
+        self.guesses << letter unless self.guesses.include? letter
+      else
+        self.wrong_guesses << letter unless self.wrong_guesses.include? letter
+        "Wrong Guess. Another try?"
+        # false
+      end
+      valid
     else
-     if @wrong_guesses.include? letter
-       "Wrong Guess. Another try?"
-       false
-     else
-     @count += 1
-      @wrong_guesses << letter
-      p @wrong_guesses
+      raise ArgumentError, "Invalid entry.  Enter a valid letter."
     end
+  end
+
+  def self.check_win_or_lose
+    # word_with_guesses
+    if @wrong_guesses.size == 7
+      'You lose code :lose'
+    elsif @wrong_guesses.size < 7 and
+        return :play
+    else
+      @word == @guesses
+      :win
     end
-  else
-    raise ArgumentError, "Invalid entry.  Enter a valid letter."
   end
-end
 
-def check_win_or_lose
-  if @counts == 7
-    :lose
-  elsif @counts < 7
-    return :play
-  else
-    @word == @guesses
-    :win
+
+  def word_with_guesses
+    gl = @guesses.split("")
+    wl = @word.split("")
+    gl.sort!.uniq
+    p gl
+
+    # "You won!" if @guesses == @word
   end
-end
-
-
-def word_with_guesses
-  "You won!" if @guesses == @word
-end
 
 end
