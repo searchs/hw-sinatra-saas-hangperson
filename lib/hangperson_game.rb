@@ -53,14 +53,12 @@ class HangpersonGame
 
 
   def check_win_or_lose
-  # state = self.word =~ /([#{self.guesses}])/
     wl = self.word.chars
     gl = self.guesses.chars
     df = wl - gl
     if self.wrong_guesses.size == 7
       :lose
     elsif df.size == 0
-      p df
       :win
     else
       :play
