@@ -12,13 +12,12 @@ class HangpersonGame
   attr_accessor :word, :guesses, :wrong_guesses
 
   def initialize(new_word)
-    if !new_word.nil? and !new_word.empty? and new_word.class == String
-      word = new_word.downcase
-      @word = word
+    if !new_word.nil? or !new_word.empty? and new_word.is_a?(String)
+      @word = new_word.downcase
       @guesses = ''
       @wrong_guesses = ''
     else
-      raise ArgumentError, "Invalid word for game!"
+      raise ArgumentError, 'Invalid word!'
     end
 
   end
@@ -30,44 +29,51 @@ class HangpersonGame
     Net::HTTP.post_form(uri, {}).body
   end
 
-
   def guess(l)
-    letter = l.downcase
-    if !letter.nil? and !letter.empty? and letter.size == 1 and letter.is_a? String
-      valid = self.word.include? letter
-      if valid
-        self.guesses << letter unless self.guesses.include? letter
+    if !l.nil? and !l.empty? or l.is_a? String and l =~ /[a-zA-Z]/ and l != ''
+      letter = l.delete('').to_s.downcase
+      if self.wrong_guesses.include?(letter)
+        status = false
+      elsif self.guesses.include?(letter)
+        status = false
       else
-        self.wrong_guesses << letter unless self.wrong_guesses.include? letter
-        "Wrong Guess. Another try?"
-        # false
+        if self.word.include?(letter)
+          self.guesses << letter
+          status = true
+        else
+          self.wrong_guesses << letter
+          status = true
+        end
       end
-      valid
     else
-      raise ArgumentError, "Invalid entry.  Enter a valid letter."
+      raise ArgumentError, 'Invalid guess. Enter a valid letter.'
     end
+    status
   end
 
-  def self.check_win_or_lose
-    # word_with_guesses
-    if @wrong_guesses.size == 7
-      'You lose code :lose'
-    elsif @wrong_guesses.size < 7 and
-        return :play
-    else
-      @word == @guesses
+
+  def check_win_or_lose
+  # state = self.word =~ /([#{self.guesses}])/
+    wl = self.word.chars
+    gl = self.guesses.chars
+    df = wl - gl
+    if self.wrong_guesses.size == 7
+      :lose
+    elsif df.size == 0
+      p df
       :win
+    else
+      :play
     end
   end
-
 
   def word_with_guesses
-    gl = @guesses.split("")
-    wl = @word.split("")
-    gl.sort!.uniq
-    p gl
-
-    # "You won!" if @guesses == @word
+    if self.guesses.size == 0
+      gl = self.wrong_guesses
+    else
+      gl = self.guesses
+    end
+    self.word.gsub(/([^#{gl}])/, '-')
   end
 
 end
