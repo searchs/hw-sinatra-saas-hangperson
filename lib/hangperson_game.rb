@@ -30,9 +30,8 @@ class HangpersonGame
   end
 
   def guess(l)
-    # status = false
     if !l.nil? and !l.empty? or l.is_a? String and l =~ /[a-zA-Z]/ and l != ''
-      letter = l.to_s.downcase
+      letter = l.delete('').to_s.downcase
       if self.wrong_guesses.include?(letter)
         status = false
       elsif self.guesses.include?(letter)
@@ -52,13 +51,18 @@ class HangpersonGame
     status
   end
 
+
   def check_win_or_lose
+  # state = self.word =~ /([#{self.guesses}])/
+    wl = self.word.chars
+    gl = self.guesses.chars
+    df = wl - gl
     if self.wrong_guesses.size == 7
       :lose
-    elsif (self.word =~ /([#{self.guesses}])/) == 0 and self.guesses.size > 0 and self.guesses != '' and self.guesses != [] and !self.wrong_guesses.nil?
+    elsif df.size == 0
+      p df
       :win
-      # state = self.word =~ /([#{self.guesses}])/
-    elsif self.wrong_guesses < 7 or self.guesses == 0
+    else
       :play
     end
   end
@@ -71,4 +75,5 @@ class HangpersonGame
     end
     self.word.gsub(/([^#{gl}])/, '-')
   end
+
 end
