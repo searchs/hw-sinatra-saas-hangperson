@@ -47,23 +47,6 @@ class HangpersonApp < Sinatra::Base
     else
       flash[:message] = 'Invalid guess.'
     end
-
-    # if @game.guess(letter)
-    #   if @game.guesses.include?(letter)
-    #     flash[:message] = 'You have already used that letter.'
-    #   end
-    # else
-    #   if @game.wrong_guesses.include?(letter)
-    #     flash[:message] = 'You have already used that letter.'
-    #   else
-    #     # if !@game.word.include? letter
-    #     flash[:message] = 'Invalid guess.'
-    #     # redirect '/show'
-    #     # else
-    #     #   @game.guess(letter)
-    #   end
-    # end
-
     redirect '/show'
   end
 
@@ -90,7 +73,7 @@ class HangpersonApp < Sinatra::Base
     ### YOUR CODE HERE ###
     if @game.check_win_or_lose == :play and @game.check_win_or_lose != :lose
       redirect '/show'
-      else
+    else
       erb :win # You may change/remove this line
     end
   end
@@ -104,7 +87,4 @@ class HangpersonApp < Sinatra::Base
     end
   end
 
-  # not_found do
-  #   halt 404, "Page Not found. Return home please. "
-  # end
 end

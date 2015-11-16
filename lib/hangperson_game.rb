@@ -12,14 +12,10 @@ class HangpersonGame
   attr_accessor :word, :guesses, :wrong_guesses
 
   def initialize(new_word)
-    # if !new_word.nil? or !new_word.empty? and new_word.is_a?(String)
-    # if !new_word.empty? and new_word.is_a?(String)
     if new_word.is_a?(String)
       @word = new_word.downcase
       @guesses = ''
       @wrong_guesses = ''
-    # elsif new_word == nil
-    #   @word = ''
     else
       raise ArgumentError, 'Invalid word!'
     end
@@ -35,8 +31,18 @@ class HangpersonGame
 
   def guess(l)
     # if !l.nil? and !l.empty? or l.is_a? String and l =~ /[a-zA-Z]/ and l != ''
-    if !l.nil? and !l.empty? or l.is_a? String and l =~ /([a-zA-Z])/
-      letter = l.delete('').to_s.downcase
+    # if !l.nil? and !l.empty? or l.is_a? String and l =~ /([a-zA-Z])/
+    # if l.is_a? String and l =~ /([a-zA-Z])/ and l != '' and l =~ /[^0-9_]/
+    # if l.is_a? String and l =~ /([a-zA-Z])/ and l != '' and l =~ /[^0-9\W\s]/
+    # if l =~ /([a-zA-Z])/ and l =~ /[^0-9\W\s]/ and !l.nil?
+    if l =~ /([a-zA-Z])/ or l =~ /[^0-9\W\s]/ and !l.nil?
+      # if l =~ /\A[\sa-z0-9]+\Z/i and !l.nil?
+      # if !l.nil?
+      # letter = l.delete('').to_s.downcase
+      # if l == '' or l =~ /[^a-zA-Z]/ or l.empty?
+      #   status = false
+      # else
+      letter = l.to_s.downcase
       if self.wrong_guesses.include?(letter)
         status = false
       elsif self.guesses.include?(letter)
@@ -50,26 +56,14 @@ class HangpersonGame
           status = true
         end
       end
+      #  l =~ /([^a-zA-Z])/ or l.to_s[0] == ''
+    elsif l =~ /([^a-zA-Z])/
+      status = false
     else
       raise ArgumentError, 'Invalid guess. Enter a valid letter.'
     end
     status
   end
-
-
-  # def check_win_or_lose
-  # # state = self.word =~ /([#{self.guesses}])/
-  #   wl = self.word.chars
-  #   gl = self.guesses.chars
-  #   df = wl - gl
-  #   if self.wrong_guesses.size == 7
-  #     :lose
-  #   elsif df.size == 0
-  #     :win
-  #   else
-  #     :play
-  #   end
-  # end
 
   def check_win_or_lose
     return :win if word_with_guesses == @word
@@ -81,5 +75,4 @@ class HangpersonGame
     return self.word.gsub(/([^#{self.guesses}])/, '-') if self.guesses.size > 0
     return "-" * self.word.size
   end
-
 end
