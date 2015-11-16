@@ -17,9 +17,8 @@ class HangpersonGame
       @guesses = ''
       @wrong_guesses = ''
     else
-      raise ArgumentError, 'Invalid word!'
+      raise ArgumentError, 'Invalid guess word!'
     end
-
   end
 
   def self.get_random_word
@@ -35,14 +34,15 @@ class HangpersonGame
     # if l.is_a? String and l =~ /([a-zA-Z])/ and l != '' and l =~ /[^0-9_]/
     # if l.is_a? String and l =~ /([a-zA-Z])/ and l != '' and l =~ /[^0-9\W\s]/
     # if l =~ /([a-zA-Z])/ and l =~ /[^0-9\W\s]/ and !l.nil?
-    if l =~ /([a-zA-Z])/ or l =~ /[^0-9\W\s]/ and !l.nil?
+    letter = l.to_s.downcase
+    if l =~ /([a-zA-Z])/ or l =~ /[^\d\w\s\W]/ and !l.nil?
       # if l =~ /\A[\sa-z0-9]+\Z/i and !l.nil?
       # if !l.nil?
       # letter = l.delete('').to_s.downcase
       # if l == '' or l =~ /[^a-zA-Z]/ or l.empty?
       #   status = false
       # else
-      letter = l.to_s.downcase
+
       if self.wrong_guesses.include?(letter)
         status = false
       elsif self.guesses.include?(letter)
@@ -55,10 +55,11 @@ class HangpersonGame
           self.wrong_guesses << letter
           status = true
         end
+
       end
       #  l =~ /([^a-zA-Z])/ or l.to_s[0] == ''
-    elsif l =~ /([^a-zA-Z])/
-      status = false
+      # elsif l.is_a? String and  l =~ /([^a-zA-Z])/
+      #   status = false
     else
       raise ArgumentError, 'Invalid guess. Enter a valid letter.'
     end
@@ -75,4 +76,5 @@ class HangpersonGame
     return self.word.gsub(/([^#{self.guesses}])/, '-') if self.guesses.size > 0
     return "-" * self.word.size
   end
+
 end
