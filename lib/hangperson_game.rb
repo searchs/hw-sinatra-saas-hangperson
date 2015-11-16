@@ -52,26 +52,29 @@ class HangpersonGame
   end
 
 
+  # def check_win_or_lose
+  # # state = self.word =~ /([#{self.guesses}])/
+  #   wl = self.word.chars
+  #   gl = self.guesses.chars
+  #   df = wl - gl
+  #   if self.wrong_guesses.size == 7
+  #     :lose
+  #   elsif df.size == 0
+  #     :win
+  #   else
+  #     :play
+  #   end
+  # end
+
   def check_win_or_lose
-    wl = self.word.chars
-    gl = self.guesses.chars
-    df = wl - gl
-    if self.wrong_guesses.size == 7
-      :lose
-    elsif df.size == 0
-      :win
-    else
-      :play
-    end
+    return :win if word_with_guesses == @word
+    return :lose if @wrong_guesses.size == 7
+    :play
   end
 
   def word_with_guesses
-    if self.guesses.size == 0
-      gl = self.wrong_guesses
-    else
-      gl = self.guesses
-    end
-    self.word.gsub(/([^#{gl}])/, '-')
+    return self.word.gsub(/([^#{self.guesses}])/,'-') if self.guesses.size > 0
+    return "-" * self.word.size
   end
 
 end
