@@ -12,10 +12,14 @@ class HangpersonGame
   attr_accessor :word, :guesses, :wrong_guesses
 
   def initialize(new_word)
-    if !new_word.nil? or !new_word.empty? and new_word.is_a?(String)
+    # if !new_word.nil? or !new_word.empty? and new_word.is_a?(String)
+    # if !new_word.empty? and new_word.is_a?(String)
+    if new_word.is_a?(String)
       @word = new_word.downcase
       @guesses = ''
       @wrong_guesses = ''
+    # elsif new_word == nil
+    #   @word = ''
     else
       raise ArgumentError, 'Invalid word!'
     end
@@ -30,7 +34,8 @@ class HangpersonGame
   end
 
   def guess(l)
-    if !l.nil? and !l.empty? or l.is_a? String and l =~ /[a-zA-Z]/ and l != ''
+    # if !l.nil? and !l.empty? or l.is_a? String and l =~ /[a-zA-Z]/ and l != ''
+    if !l.nil? and !l.empty? or l.is_a? String and l =~ /([a-zA-Z])/
       letter = l.delete('').to_s.downcase
       if self.wrong_guesses.include?(letter)
         status = false
@@ -73,7 +78,7 @@ class HangpersonGame
   end
 
   def word_with_guesses
-    return self.word.gsub(/([^#{self.guesses}])/,'-') if self.guesses.size > 0
+    return self.word.gsub(/([^#{self.guesses}])/, '-') if self.guesses.size > 0
     return "-" * self.word.size
   end
 
